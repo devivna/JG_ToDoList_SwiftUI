@@ -12,6 +12,8 @@ struct ToDoListView: View {
     var toDos = [
         "Learn Swift", "Build Apps", "Change the World", "Do my best"]
     
+    @State private var sheetIsPresented = false
+
     var body: some View {
         NavigationStack {
             VStack {
@@ -20,12 +22,26 @@ struct ToDoListView: View {
                         NavigationLink(item) {
                             DetailView(passedValue: item)
                         }
+                        .font(.title3)
                     }
                 }
             }
             .navigationTitle("ToDo List")
             .navigationBarTitleDisplayMode(.large)
             .listStyle(.insetGrouped)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        sheetIsPresented.toggle()
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
+            
+            .fullScreenCover(isPresented: $sheetIsPresented) {
+                DetailView(passedValue: "")
+            }
         }
     }
 }

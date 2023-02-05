@@ -11,14 +11,58 @@ struct DetailView: View {
     @Environment(\.dismiss) private var dismiss
     var passedValue: String
     
+    @State private var toDo = ""
+    @State private var remainderIsOn = false
+    @State private var dueDate = Date() + (60*60*24)
+    // (60*60*24) = 1 day = 60 sec * 60 min * 24 hours
+    
+    @State private var notes = ""
+    @State private var isCompleted = false
+    
     var body: some View {
-        VStack {
-            Spacer()
-            Text(passedValue)
-            Spacer()
-            Button("Back", action: { dismiss() })
+        
+        NavigationStack {
+            List {
+                TextField("Enter To Do here", text: $toDo)
+                    .font(.title)
+                    .textFieldStyle(.roundedBorder)
+                    .padding(.vertical)
+                    .listRowSeparator(.hidden)
+                
+                Toggle("Set Reminder: ", isOn: $remainderIsOn)
+                    .padding(.top)
+                    .listRowSeparator(.hidden)
+                DatePicker("Date", selection: $dueDate)
+                    .listRowSeparator(.hidden)
+                    .padding(.bottom)
+                    .disabled(!remainderIsOn)
+                
+                Text("Notes:")
+                    .padding(.top)
+                
+                TextField("Notes", text: $notes, axis: .vertical)
+                    .textFieldStyle(.roundedBorder)
+                    .listRowSeparator(.hidden)
+                
+                Toggle("Completed:", isOn: $isCompleted)
+                    .padding(.top)
+                    .listRowSeparator(.hidden)
+            }
+            .listStyle(.grouped)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Save") {
+                        //
+                    }
+                }
+            }
+            .navigationBarBackButtonHidden()
         }
-        .navigationBarBackButtonHidden()
     }
 }
 
