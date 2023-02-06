@@ -11,9 +11,7 @@ class ToDoViewModel: ObservableObject {
     @Published var toDos: [ToDo] = []
     
     init() {
-        toDos.append(ToDo(item: "Item 1"))
-        toDos.append(ToDo(item: "Item 2"))
-        toDos.append(ToDo(item: "Item 3"))
+        loadData()
     }
     
     func saveToDo(toDo: ToDo, newToDo: Bool) {
@@ -26,13 +24,37 @@ class ToDoViewModel: ObservableObject {
                 toDos[index] = toDo // apply new values
             }
         }
+        saveData()
     }
     
     func moveToDo(oldIndex: IndexSet, newIndex: Int) {
         toDos.move(fromOffsets: oldIndex, toOffset: newIndex)
+        saveData()
     }
     
     func deleteToDo(index: IndexSet) {
         toDos.remove(atOffsets: index)
+        saveData()
     }
+    
+    func loadData() {
+        let path = URL.documentsDirectory.appending(component: "toDos")
+        guard let data = try? Data(contentsOf: path) else {return}
+        do {
+            toDos = try JSONDecoder().decode(Array<ToDo>.self, from: data)
+        } catch {
+            print("Error: Could not load data \(error.localizedDescription)")
+        }
+    }
+    
+    func saveData() {
+        let path = URL.documentsDirectory.appending(component: "toDos")
+        let data = try? JSONEncoder().encode(toDos)
+        do {
+            try data?.write(to: path)
+        } catch {
+            print("Error: Could not save data \(error.localizedDescription)")
+        }
+    }
+    
 }
