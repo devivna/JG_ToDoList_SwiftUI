@@ -9,42 +9,35 @@ import SwiftUI
 
 struct DetailView: View {
     @Environment(\.dismiss) private var dismiss
-    var passedValue: String
-    
-    @State private var toDo = ""
-    @State private var remainderIsOn = false
-    @State private var dueDate = Date() + (60*60*24)
-    // (60*60*24) = 1 day = 60 sec * 60 min * 24 hours
-    
-    @State private var notes = ""
-    @State private var isCompleted = false
-    
+    @EnvironmentObject var toDoVM: ToDoViewModel
+    @State var toDo: ToDo
+
     var body: some View {
         
         NavigationStack {
             List {
-                TextField("Enter To Do here", text: $toDo)
+                TextField("Enter To Do here", text: $toDo.item)
                     .font(.title)
                     .textFieldStyle(.roundedBorder)
                     .padding(.vertical)
                     .listRowSeparator(.hidden)
                 
-                Toggle("Set Reminder: ", isOn: $remainderIsOn)
+                Toggle("Set Reminder: ", isOn: $toDo.remainderIsOn)
                     .padding(.top)
                     .listRowSeparator(.hidden)
-                DatePicker("Date", selection: $dueDate)
+                DatePicker("Date", selection: $toDo.dueDate)
                     .listRowSeparator(.hidden)
                     .padding(.bottom)
-                    .disabled(!remainderIsOn)
+                    .disabled(!toDo.remainderIsOn)
                 
                 Text("Notes:")
                     .padding(.top)
                 
-                TextField("Notes", text: $notes, axis: .vertical)
+                TextField("Notes", text: $toDo.notes, axis: .vertical)
                     .textFieldStyle(.roundedBorder)
                     .listRowSeparator(.hidden)
                 
-                Toggle("Completed:", isOn: $isCompleted)
+                Toggle("Completed:", isOn: $toDo.isCompleted)
                     .padding(.top)
                     .listRowSeparator(.hidden)
             }
@@ -68,6 +61,9 @@ struct DetailView: View {
 
 struct DetailView_Previews: PreviewProvider {
     static var previews: some View {
-        DetailView(passedValue: "Item 1")
+        NavigationStack {
+            DetailView(toDo: ToDo())
+                .environmentObject(ToDoViewModel())
+        }
     }
 }
