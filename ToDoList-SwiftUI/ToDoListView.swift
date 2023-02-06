@@ -23,11 +23,18 @@ struct ToDoListView: View {
                         }
                         .font(.title3)
                     }
+                    .onMove(perform: toDoVM.moveToDo )
+                    .onDelete(perform: toDoVM.deleteToDo )
                 }
             }
             .navigationTitle("ToDo List")
             .navigationBarTitleDisplayMode(.large)
             .listStyle(.insetGrouped)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    EditButton()
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
@@ -40,9 +47,10 @@ struct ToDoListView: View {
             
             .fullScreenCover(isPresented: $sheetIsPresented) {
                 //NavigationStack {
-                    DetailView(toDo: ToDo())
+                    DetailView(toDo: ToDo(), newToDo: true)
                 //}
             }
+            
         }
     }
 }

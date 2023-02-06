@@ -10,8 +10,10 @@ import SwiftUI
 struct DetailView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var toDoVM: ToDoViewModel
-    @State var toDo: ToDo
 
+    @State var toDo: ToDo
+    var newToDo = false
+    
     var body: some View {
         
         NavigationStack {
@@ -50,7 +52,8 @@ struct DetailView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Save") {
-                        //
+                        toDoVM.saveToDo(toDo: toDo, newToDo: newToDo)
+                        dismiss()
                     }
                 }
             }
