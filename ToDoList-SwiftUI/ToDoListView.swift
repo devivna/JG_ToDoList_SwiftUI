@@ -18,8 +18,14 @@ struct ToDoListView: View {
             VStack {
                 List{
                     ForEach(toDoVM.toDos) { element in
-                        NavigationLink(element.item) {
-                            DetailView(toDo: element)
+                        HStack {
+                            Image(systemName: element.isCompleted ? "checkmark.rectangle" : "rectangle")
+                                .onTapGesture {
+                                    toDoVM.toggleCompletion(toDo: element)
+                                }
+                            NavigationLink(element.item) {
+                                    DetailView(toDo: element)
+                            }
                         }
                         .font(.title3)
                     }
@@ -29,7 +35,7 @@ struct ToDoListView: View {
             }
             .navigationTitle("ToDo List")
             .navigationBarTitleDisplayMode(.large)
-            .listStyle(.insetGrouped)
+            .listStyle(.plain)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     EditButton()

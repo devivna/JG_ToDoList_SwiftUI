@@ -14,6 +14,25 @@ class ToDoViewModel: ObservableObject {
         loadData()
     }
     
+    func toggleCompletion(toDo: ToDo) {
+        
+        // -- my
+        //        if let index = toDos.firstIndex(where: { $0.id == toDo.id }) {
+        //            toDos[index].isCompleted.toggle()
+        //        }
+        
+        // -- Galaugher
+        // guard toDo.id != nil else {return} // if in model id = String?
+        
+        var newToDo = toDo // we can't modify toDo
+        newToDo.isCompleted.toggle()
+        if let index = toDos.firstIndex(where: { $0.id == toDo.id }) {
+            toDos[index] = newToDo
+        }
+        saveData()
+        
+    }
+    
     func saveToDo(toDo: ToDo, newToDo: Bool) {
         if newToDo {
             toDos.append(toDo)
