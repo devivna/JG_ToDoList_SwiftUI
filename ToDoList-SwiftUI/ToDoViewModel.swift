@@ -21,7 +21,7 @@ class ToDoViewModel: ObservableObject {
         //            toDos[index].isCompleted.toggle()
         //        }
         
-        // -- Galaugher
+        // -- Gallaugher
         // guard toDo.id != nil else {return} // if in model id = String?
         
         var newToDo = toDo // we can't modify toDo
